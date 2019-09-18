@@ -17,17 +17,31 @@ startBtn.addEventListener('click', () => {
     startBtn.parentElement.style.display = 'none';
 });
 
-function getRandomPhraseAsArray(array){
+// random phrase to array function
+function getRandomPhraseAsArray(arr){
     let arrayChar = [];
-
     // check if an array was passed
-    if (array === undefined || array.length == 0 ) {
+    if (arr === undefined || arr.length == 0 ) {
         // generate random number and select phrase based on length
         let randNum = Math.floor(Math.random() * phrasesArray.length);
         arrayChar = phrasesArray[randNum].split("");
     } else {
-        arrayChar = array.split("");
+        arrayChar = arr.split("");
     }
     // return array
     return arrayChar;
 } 
+
+// set game display
+function addPhraseToDisplay(arr){
+    for (let char of arr) {
+        let liElement = document.createElement('li');
+        liElement.textContent = char
+        if (char !== ' ') {
+            liElement.className = 'letter';
+        }
+        phraseId.append(liElement);
+    }
+}
+
+addPhraseToDisplay(getRandomPhraseAsArray());
