@@ -32,10 +32,10 @@ function addPhraseToDisplay(arr){
     for (let char of arr) {
         let liElement = document.createElement('li');
         liElement.textContent = char
-        if (char !== ' ') {
-            liElement.className = 'letter';
-        } else if (char === ' ') {
+        if (char === ' ') {
             liElement.className = 'space';
+        } else {
+            liElement.className = 'letter';
         }
         phraseId.append(liElement);
     }
