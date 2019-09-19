@@ -41,7 +41,7 @@ function addPhraseToDisplay(arr){
     }
 }
 
-// check selected letter
+// check selected letter - better way to check for the same match in a list??
 function checkLetter (letterBtn) {
     let arrayLetters = phraseId.querySelectorAll('.letter');
     let letter = letterBtn.textContent;
@@ -69,11 +69,38 @@ function checkLetter (letterBtn) {
 document.addEventListener('click', (e) => {
     if (e.target.type === 'submit') {
         let letterFound = checkLetter(e.target);
-        e.target.className += 'chosen';
+        if(letterFound === null) {
+            let heart = document.querySelectorAll('.tries');
+            heart[missed].style.display = 'none';
+            missed += 1;
+        }
         e.target.setAttribute('disabled', 'true');
+        e.target.className += 'chosen';
+        checkWin();
     }
+
 });
 
+// check win function
+function checkWin () {
+    let arrayLetters = phraseId.querySelectorAll('.letter');
+    let arrayShow = phraseId.querySelectorAll('.show');
+
+    console.log('letter: ' + arrayLetters.length);
+    console.log('show: ' + arrayLetters.length);
+
+    if (arrayLetters.length === arrayShow.length) {
+        startBtn.parentElement.style.display = 'flex';
+        startBtn.parentElement.className = 'win';
+        startBtn.style.display = 'none';
+        startBtn.previousElementSibling.textContent = "you won! :)"
+    } else if (missed >= 5) {
+        startBtn.parentElement.style.display = 'flex';
+        startBtn.parentElement.className = 'lose';
+        startBtn.style.display = 'none';
+        startBtn.previousElementSibling.textContent = "you lost :("
+    }
+}
 
 // set random phrase
 addPhraseToDisplay(getRandomPhraseAsArray());
