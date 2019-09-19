@@ -45,24 +45,17 @@ function addPhraseToDisplay(arr){
 function checkLetter (letterBtn) {
     let arrayLetters = phraseId.querySelectorAll('.letter');
     let letter = letterBtn.textContent;
-
-    let tempLetter = '';
-    let match = false;
+ 
+    let match = null;
 
     for (let i = 0; i < arrayLetters.length; i++) {
         if (arrayLetters[i].textContent === letter) {
             // show class
             arrayLetters[i].className += ' show';
-            match = true;
-            tempLetter = arrayLetters[i].textContent;
+            match = arrayLetters[i].textContent;
         }
     }
-
-    if (match) {
-        return tempLetter;
-    } else {
-        return null;
-    }
+    return match;
 }
 
 // keyboard button event listener
