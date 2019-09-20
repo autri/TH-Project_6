@@ -1,9 +1,7 @@
 const qwertyId = document.getElementById('qwerty');
 const phraseId = document.getElementById('phrase');
-let missed = 0;
-
 const startBtn = document.querySelector('.btn__reset');
-
+const overlay = document.getElementById('overlay');
 const phrasesArray = [
     'red velvet cake',
     'sticky toffee pudding',
@@ -11,6 +9,9 @@ const phrasesArray = [
     'peppermint swirl fudge',
     'pumpkin pie'
 ];
+
+let heart = document.querySelectorAll('.tries');
+let missed = 0;
 
 // convert phrase to character array
 function getRandomPhraseAsArray(arr){
@@ -41,7 +42,7 @@ function addPhraseToDisplay(arr){
     }
 }
 
-// check selected letter - better way to check for the same match in a list??
+// check selected letter
 function checkLetter (letterBtn) {
     let arrayLetters = phraseId.querySelectorAll('.letter');
     let letter = letterBtn.textContent;
@@ -63,7 +64,6 @@ document.addEventListener('click', (e) => {
     if (e.target.type === 'submit') {
         let letterFound = checkLetter(e.target);
         if(letterFound === null) {
-            let heart = document.querySelectorAll('.tries');
             heart[missed].style.display = 'none';
             missed += 1;
         }
@@ -79,20 +79,37 @@ function checkWin () {
     let arrayLetters = phraseId.querySelectorAll('.letter');
     let arrayShow = phraseId.querySelectorAll('.show');
 
-    console.log('letter: ' + arrayLetters.length);
-    console.log('show: ' + arrayLetters.length);
-
     if (arrayLetters.length === arrayShow.length) {
-        startBtn.parentElement.style.display = 'flex';
-        startBtn.parentElement.className = 'win';
-        startBtn.style.display = 'none';
+        overlay.className = 'win';
+        overlay.style.display = 'flex';
+        startBtn.textContent = 'Restart Game';
         startBtn.previousElementSibling.textContent = "you won! :)"
+        startBtn.addEventListener('click', resetGame(arrayLetters));
     } else if (missed >= 5) {
-        startBtn.parentElement.style.display = 'flex';
-        startBtn.parentElement.className = 'lose';
-        startBtn.style.display = 'none';
+        overlay.className = 'lose';
+        overlay.style.display = 'flex';
+        startBtn.textContent = 'Restart Game';
         startBtn.previousElementSibling.textContent = "you lost :("
+        startBtn.addEventListener('click', resetGame(arrayLetters));
     }
+}
+
+function resetGame(arrayLetters) {
+    let keyboard = qwertyId.querySelectorAll('button');
+    for (let letter of arrayLetters) {
+        phraseId.removeChild(letter);
+    }
+    for (let key of keyboard) {
+        key.classList.remove('chosen');
+        key.removeAttribute('disabled')
+    }
+    for (let i = 0; i < heart.length; i++) {
+        heart[i].style.display = 'inline-block';
+    }
+
+    missed = 0;
+    addPhraseToDisplay(getRandomPhraseAsArray());
+
 }
 
 // set random phrase
@@ -100,5 +117,6 @@ addPhraseToDisplay(getRandomPhraseAsArray());
 
 // hide overlay when start button clicked
 startBtn.addEventListener('click', () => {
-    startBtn.parentElement.style.display = 'none';
+    overlay.style.display = 'none';
+    // overlay.classList.remove('start');
 });
